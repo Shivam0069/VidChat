@@ -10,7 +10,7 @@ export default function NavBar() {
   const router = useRouter();
   const { userId } = useAuth();
   return (
-    <div className="sticky top-0 border border-b-primary/10">
+    <div className="sticky top-0 border border-b-primary/10 bg-white">
       <Container>
         <div className="flex justify-between items-center">
           <div
