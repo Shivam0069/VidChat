@@ -5,7 +5,6 @@ import { Server } from "socket.io";
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
 const port = 3000;
-console.log("running...233");
 
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
@@ -15,9 +14,27 @@ app.prepare().then(() => {
   const httpServer = createServer(handler);
 
   const io = new Server(httpServer);
-
+  let onlineUsers = [];
   io.on("connection", (socket) => {
-    // ...
+    socket.on("addNewUser", (clerkUser) => {
+      clerkUser &&
+        !onlineUsers.some((user) => user?.userId === clerkUser.id) &&
+        onlineUsers.push({
+          userId: clerkUser.id,
+          socketId: socket.id,
+          profile: clerkUser,
+        });
+
+      //sending currently active users
+      io.emit("getUsers", onlineUsers);
+    });
+    socket.on("disconnect", () => {
+      onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
+
+      //sending currently active users
+
+      io.emit("getUsers", onlineUsers);
+    });
   });
 
   httpServer
