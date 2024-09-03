@@ -5,7 +5,8 @@ import VideoContainer from "./VideoContainer";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 
 export default function VideoCall() {
-  const { localStream } = useSocket();
+  const { localStream, peer, ongoingCall, handleHangup, isCallEnded } =
+    useSocket();
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVidOn, setIsVidOn] = useState(true);
 
@@ -32,14 +33,27 @@ export default function VideoCall() {
     }
   }, [localStream]);
 
+  const isOnCall = localStream && peer && ongoingCall ? true : false;
+  if (isCallEnded) {
+    return <div className="mt-4 text-rose-500 text-center">Call Ended</div>;
+  }
+
+  if (!localStream && !peer) return;
   return (
-    <div className="mt-4">
-      <div className="w-full flex justify-center">
+    <div className="">
+      <div className=" mt-4 relative">
         {localStream && (
           <VideoContainer
             stream={localStream}
             isLocalStream={true}
-            isOnCall={false}
+            isOnCall={isOnCall}
+          />
+        )}
+        {peer && peer.stream && (
+          <VideoContainer
+            stream={peer.stream}
+            isLocalStream={false}
+            isOnCall={isOnCall}
           />
         )}
       </div>
@@ -49,7 +63,12 @@ export default function VideoCall() {
         </button>
         <button
           className="px-4 py-2 bg-rose-500 text-white rounded mx-4 "
-          onClick={() => {}}
+          onClick={() =>
+            handleHangup({
+              ongoingCall: ongoingCall ? ongoingCall : undefined,
+              isEmitHangup: true,
+            })
+          }
         >
           End Call
         </button>

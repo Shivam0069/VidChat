@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import React, { useEffect, useRef } from "react";
 interface iVideoContainer {
   stream: MediaStream | null;
@@ -19,7 +20,12 @@ export default function VideoContainer({
   }, [stream]);
   return (
     <video
-      className="rounded border w-[800px] "
+      className={cn(
+        "rounded border w-[800px] ",
+        isLocalStream &&
+          isOnCall &&
+          "w-[200px] absolute top-0 left-0 h-auto border-2 border-purple-500"
+      )}
       autoPlay
       playsInline
       muted={isLocalStream}
