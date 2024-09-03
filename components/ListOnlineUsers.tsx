@@ -6,7 +6,7 @@ import Avatar from "./Avatar";
 
 export default function ListOnlineUsers() {
   const { user } = useUser();
-  const { onlineUsers } = useSocket();
+  const { onlineUsers, handleCall } = useSocket();
   return (
     <div className="flex w-full gap-2 border-b border-b-primary/10 items-center pb-2">
       {onlineUsers &&
@@ -16,6 +16,7 @@ export default function ListOnlineUsers() {
             <div
               key={onlineUser.userId}
               className="flex flex-col gap-1 items-center cursor-pointer"
+              onClick={() => handleCall(onlineUser)}
             >
               <Avatar src={onlineUser.profile.imageUrl} />
               <div className="text-sm">
