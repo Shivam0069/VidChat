@@ -9,6 +9,7 @@ export default function VideoCall() {
     useSocket();
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVidOn, setIsVidOn] = useState(true);
+  console.log("call ended >>", isCallEnded);
 
   useEffect(() => {
     if (localStream) {
@@ -41,7 +42,7 @@ export default function VideoCall() {
   if (!localStream && !peer) return;
   return (
     <div className="">
-      <div className=" mt-4 relative">
+      <div className=" mt-4 relative max-w-[800px] mx-auto">
         {localStream && (
           <VideoContainer
             stream={localStream}

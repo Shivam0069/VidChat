@@ -223,6 +223,10 @@ export const SocketContextProvider = ({
       const stream = await getMediaStream();
       if (!stream) {
         console.log("Could not get Stream in HandleJoinCall");
+        handleHangup({
+          ongoingCall: ongoingCall ? ongoingCall : undefined,
+          isEmitHangup: true,
+        });
         return;
       }
 
@@ -308,15 +312,15 @@ export const SocketContextProvider = ({
     };
   }, [socket, isSocketConnected, user, onIncomingCall, completePeerConnection]);
 
-  // useEffect(() => {
-  //   let timeout: ReturnType<typeof setTimeout>;
-  //   if (isCallEnded) {
-  //     timeout = setTimeout(() => {
-  //       setIsCallEnded(false);
-  //     }, 2000);
-  //   }
-  //   return () => clearTimeout(timeout);
-  // }, [isCallEnded]);
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    if (isCallEnded) {
+      timeout = setTimeout(() => {
+        setIsCallEnded(false);
+      }, 2000);
+    }
+    return () => clearTimeout(timeout);
+  }, [isCallEnded]);
 
   return (
     <SocketContext.Provider
