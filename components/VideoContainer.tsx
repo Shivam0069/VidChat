@@ -24,7 +24,7 @@ export default function VideoContainer({
         "rounded border w-[800px] ",
         isLocalStream &&
           isOnCall &&
-          "w-[200px] absolute top-0 left-0 h-auto border-2 border-purple-500"
+          "md:w-[200px] w-16 h-16  absolute top-0 left-0 md:h-auto border-2 border-purple-500"
       )}
       autoPlay
       playsInline
